@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سجل المدرسين</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+    <header class="main-header">
+        <div class="header-content container">
+            <div class="title-area">
+                <h1>📚 سجل المدرسين</h1>
+                <div class="counter-badge">
+                    إجمالي المدرسين: <strong id="teacher-count">{{ count }}</strong>
+                </div>
+            </div>
+            <div class="auth-area">
+                {% if is_admin %}
+                <span class="admin-badge">وضع المسؤول 🛡️</span>
+                <a href="/logout" class="btn btn-sm btn-outline">تسجيل خروج</a>
+                {% else %}
+                <a href="/login" class="btn btn-sm btn-outline">دخول المسؤول 🔒</a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- رسائل التنبيه والنجاح -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="flashes">
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        <!-- بطاقة إضافة مدرس جديد -->
+        <section class="add-section card-box">
+            <h2>➕ إضافة صورة مدرس</h2>
+            <form action="/add" method="post" enctype="multipart/form-data" class="form-grid">
+                <div class="form-group">
+                    <label for="name">اسم المدرس:</label>
+                    <input type="text" name="name" id="name" placeholder="مثال: أ. محمد أحمد" required>
+                </div>
+                <div class="form-group">
+                    <label for="specialization">التخصص:</label>
+                    <input type="text" name="specialization" id="specialization"
+                        placeholder="مثال: لغة عربية، رياضيات..." required>
+                </div>
+                <div class="form-group">
+                    <label for="photo">اختيار الصورة من الكمبيوتر:</label>
+                    <input type="file" name="photo" id="photo" accept="image/*" required>
+                </div>
+                <div class="form-group submit-group">
+                    <button type="submit" class="btn btn-success">إضافة صورة مدرس</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- شبكة بطاقات المدرسين -->
+        <section class="grid-section">
+            {% if teachers|length == 0 %}
+            <div class="empty-state card-box">
+                <p>لا يوجد مدرسين مسجلين حتى الآن. ابدأ بإضافة أول مدرس عبر النموذج أعلاه.</p>
+            </div>
+            {% else %}
+            <div class="teachers-grid">
+                {% for teacher in teachers %}
+                <div class="teacher-card" id="card-{{ teacher.id }}">
+                    <div class="image-wrapper">
+                        <img src="/images/{{ teacher.image_filename }}" alt="{{ teacher.name }}" loading="lazy">
+                    </div>
+                    <div class="card-body">
+                        <form action="/edit/{{ teacher.id }}" method="post" class="edit-form">
+                            <div class="form-group">
+                                <label>اسم المدرس:</label>
+                                <input type="text" name="name" value="{{ teacher.name }}" required>
+                            </div>
+                            <div class="form-group">
+                                <label>التخصص:</label>
+                                <input type="text" name="specialization" value="{{ teacher.specialization }}" required>
+                            </div>
+                            <div class="card-actions">
+                                <button type="submit" class="btn btn-primary btn-sm">حفظ التعديل 💾</button>
+                            </div>
+                        </form>
+
+                        {% if is_admin %}
+                        <form action="/delete/{{ teacher.id }}" method="post" class="delete-form"
+                            onsubmit="return confirmDelete();">
+                            <button type="submit" class="btn btn-danger btn-sm">حذف 🗑️</button>
+                        </form>
+                        {% else %}
+                        <form action="/delete/{{ teacher.id }}" method="post" class="delete-form"
+                            onsubmit="return confirmDelete();">
+                            <button type="submit" class="btn btn-danger-outline btn-sm" title="يتطلب صلاحية المسؤول">حذف
+                                🔒</button>
+                        </form>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </section>
+    </main>
+
+    <script src="/static/app.js"></script>
+</body>
+
+</html>

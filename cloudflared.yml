@@ -1,0 +1,9 @@
+tunnel: teachers-tunnel
+credentials-file: C:\Users\ah90y\.cloudflared\teachers-tunnel.json
+protocol: http2
+originRequest:
+  connectTimeout: 30s
+  httpHostHeader: localhost:5000
+  noTLSVerify: true
+url: http://localhost:5000
+

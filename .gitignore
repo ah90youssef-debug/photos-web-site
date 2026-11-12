@@ -1,0 +1,16 @@
+# Python virtual env / embedded
+python_embed/
+# Logs
+*.log
+# Bytecode
+__pycache__/
+*.pyc
+# OS files
+Thumbs.db
+.DS_Store
+# Environment files
+.env
+# IDE files
+.vscode/
+# Build artifacts
+*.egg-info/
