@@ -3,7 +3,9 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#2563eb">
+    <meta name="description" content="سجل المدرسين لإدارة وتنظيم صور وبيانات المعلمين">
     <title>سجل المدرسين</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
@@ -14,7 +16,7 @@
             <div class="title-area">
                 <h1>📚 سجل المدرسين</h1>
                 <div class="counter-badge">
-                    إجمالي المدرسين: <strong id="teacher-count">{{ count }}</strong>
+                    المدرسين: <strong id="teacher-count" style="margin-right: 4px;">{{ count }}</strong>
                 </div>
             </div>
             <div class="auth-area">
@@ -56,11 +58,11 @@
                         placeholder="مثال: لغة عربية، رياضيات..." required>
                 </div>
                 <div class="form-group">
-                    <label for="photo">اختيار الصورة من الكمبيوتر:</label>
+                    <label for="photo">اختيار الصورة من الكمبيوتر أو الهاتف:</label>
                     <input type="file" name="photo" id="photo" accept="image/*" required>
                 </div>
                 <div class="form-group submit-group">
-                    <button type="submit" class="btn btn-success">إضافة صورة مدرس</button>
+                    <button type="submit" class="btn btn-success full-width">إضافة صورة مدرس 📤</button>
                 </div>
             </form>
         </section>
@@ -89,20 +91,19 @@
                                 <input type="text" name="specialization" value="{{ teacher.specialization }}" required>
                             </div>
                             <div class="card-actions">
-                                <button type="submit" class="btn btn-primary btn-sm">حفظ التعديل 💾</button>
+                                <button type="submit" class="btn btn-primary btn-sm full-width">حفظ التعديل 💾</button>
                             </div>
                         </form>
 
                         {% if is_admin %}
                         <form action="/delete/{{ teacher.id }}" method="post" class="delete-form"
                             onsubmit="return confirmDelete();">
-                            <button type="submit" class="btn btn-danger btn-sm">حذف 🗑️</button>
+                            <button type="submit" class="btn btn-danger btn-sm full-width">حذف 🗑️</button>
                         </form>
                         {% else %}
                         <form action="/delete/{{ teacher.id }}" method="post" class="delete-form"
                             onsubmit="return confirmDelete();">
-                            <button type="submit" class="btn btn-danger-outline btn-sm" title="يتطلب صلاحية المسؤول">حذف
-                                🔒</button>
+                            <button type="submit" class="btn btn-danger-outline btn-sm full-width" title="يتطلب صلاحية المسؤول">حذف 🔒</button>
                         </form>
                         {% endif %}
                     </div>
